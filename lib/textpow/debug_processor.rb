@@ -12,17 +12,17 @@ module Textpow
       end
       
       def open_tag name, position
-         puts pprint( "", "{#{name}", position + @line_marks.size)
+         STDERR.puts pprint( "", "{#{name}", position + @line_marks.size)
       end
       
       def close_tag name, position
-         puts pprint( "", "}#{name}", position + @line_marks.size)
+         STDERR.puts pprint( "", "}#{name}", position + @line_marks.size)
       end
       
       def new_line line
          @line_number += 1
          @line_marks = "[#{@line_number.to_s.rjust( 4, '0' )}] "
-         puts "#{@line_marks}#{line}"
+         STDERR.puts "#{@line_marks}#{line}"
       end
       
       def start_parsing
