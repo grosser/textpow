@@ -84,7 +84,11 @@ module Textpow
          hash.each do |key, value|
             case key
             when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
-               instance_variable_set( "@#{key}", Oniguruma::ORegexp.new( value, OPTIONS ) )
+               begin
+                  instance_variable_set( "@#{key}", Oniguruma::ORegexp.new( value, OPTIONS ) )
+               rescue ArgumentError => e
+                  raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
+               end
             when "content", "fileTypes", "name", "contentName", "end", "scopeName", "keyEquivalent"
                instance_variable_set( "@#{key}", value )
             when "captures", "beginCaptures", "endCaptures"
@@ -111,6 +115,7 @@ module Textpow
             parse_line stack, line, processor
          end
          processor.end_parsing if processor
+         processor
       end
       
       protected
