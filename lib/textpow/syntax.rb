@@ -61,7 +61,7 @@ module Textpow
       attr_accessor :repository
       attr_accessor :patterns
       
-      def self.load filename
+      def self.load filename, name_space = :default
          table = nil
          case filename
          when /(\.tmSyntax|\.plist)$/
@@ -72,14 +72,16 @@ module Textpow
             end
          end
          if table
-            SyntaxNode.new( table )
+            SyntaxNode.new( table, nil, name_space )
          else
             nil
          end
       end
       
-      def initialize hash, syntax = nil
-         @@syntaxes[hash["scopeName"]] = self if hash["scopeName"]
+      def initialize hash, syntax = nil, name_space = :default
+         @name_space = name_space
+         @@syntaxes[@name_space] ||= {}
+         @@syntaxes[@name_space][hash["scopeName"]] = self if hash["scopeName"]
          @syntax = syntax || self
          hash.each do |key, value|
             case key
@@ -105,7 +107,7 @@ module Textpow
       
       
       def syntaxes
-         @@syntaxes
+         @@syntaxes[@name_space]
       end
       
       def parse( string, processor = nil )
@@ -126,7 +128,7 @@ module Textpow
             if value["include"]
                @repository[key] = SyntaxProxy.new( value, self.syntax )
             else
-               @repository[key] = SyntaxNode.new( value, self.syntax )
+               @repository[key] = SyntaxNode.new( value, self.syntax, @name_space )
             end
          end
       end
@@ -137,7 +139,7 @@ module Textpow
             if p["include"]
                @patterns << SyntaxProxy.new( p, self.syntax )
             else
-               @patterns << SyntaxNode.new( p, self.syntax )
+               @patterns << SyntaxNode.new( p, self.syntax, @name_space )
             end
          end
       end
