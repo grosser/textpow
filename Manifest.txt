@@ -5,6 +5,7 @@ lib/textpow
 lib/textpow/syntax.rb
 lib/textpow/score_manager.rb
 lib/textpow/debug_processor.rb
+mm/textpow.mm
 test/test_textpow.rb
 History.txt
 Rakefile
