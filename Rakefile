@@ -29,10 +29,10 @@ begin
       p.extra_deps << ['oniguruma', '>= 1.1.0']
       p.extra_deps << ['plist', '>= 3.0.0']
    end
-
+   
    desc 'Create MaMa documentation'
-   task :mama do
-      system "mm -c -o manual mm/manual.mm"
+   task :mama => :clean do
+      system "mm -c -t refresh -o manual mm/manual.mm"
    end
    
    desc 'Publish MaMa documentation to RubyForge'
