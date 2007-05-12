@@ -41,7 +41,6 @@ begin
       host = "#{config["username"]}@rubyforge.org"
       remote_dir = "/var/www/gforge-projects/#{h.rubyforge_name}"
       local_dir = 'manual'
-      FileUtils.copy( File.join( local_dir, "index.xhtml" ), File.join( local_dir, "index.html" ) )
       system "rsync -av --delete #{local_dir}/ #{host}:#{remote_dir}"
    end
 
