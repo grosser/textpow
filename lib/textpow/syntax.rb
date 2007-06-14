@@ -111,12 +111,12 @@ module Textpow
       end
       
       def parse( string, processor = nil )
-         processor.start_parsing if processor
+         processor.start_parsing self.scopeName if processor
          stack = [[self, nil]]
          string.each_line do |line|
             parse_line stack, line, processor
          end
-         processor.end_parsing if processor
+         processor.end_parsing self.scopeName if processor
          processor
       end
       

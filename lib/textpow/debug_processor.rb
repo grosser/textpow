@@ -25,10 +25,12 @@ module Textpow
          STDERR.puts "#{@line_marks}#{line}"
       end
       
-      def start_parsing
+      def start_parsing name
+         STDERR.puts "{#{name}"
       end
       
-      def end_parsing
+      def end_parsing name
+         STDERR.puts "}#{name}"
       end
    end
 end
