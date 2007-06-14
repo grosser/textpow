@@ -256,6 +256,7 @@ having `name="text.string", position=10` and the second having
 
 * [Oniguruma http://www.geocities.jp/kosako3/oniguruma/].
 * [Oniguruma for ruby http://rubyforge.org/projects/oniguruma/].
+* [Ruby plist parsing library http://rubyforge.org/projects/plist].
 
 = Projects using Textpow =
 
