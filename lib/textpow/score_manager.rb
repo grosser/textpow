@@ -12,15 +12,20 @@ module Textpow
       def score search_scope, reference_scope
          max = 0
          search_scope.split( ',' ).each do |scope|
-            arrays = scope.split(/\B-\B/)
+            arrays = scope.split(/\B-/)
             if arrays.size == 1
                max = [max, score_term( arrays[0], reference_scope )].max
-            elsif arrays.size == 2
-               unless score_term( arrays[1], reference_scope ) > 0
-                  max = [max, score_term( arrays[0], reference_scope )].max
+            elsif arrays.size > 1
+               excluded = false
+               arrays[1..-1].each do |a| 
+                  if score_term( arrays[1], reference_scope ) > 0
+                     excluded = true
+                     break
+                  end
                end
+               max = [max, score_term( arrays[0], reference_scope )].max unless excluded
             else
-               raise ParsingError, "Error in scope string: '#{search_scope}'" if arrays.size < 1 || arrays.size > 2
+               raise ParsingError, "Error in scope string: '#{search_scope}' #{arrays.size} is not a valid number of operands" if arrays.size < 1
             end
          end
          max
