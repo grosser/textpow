@@ -218,10 +218,10 @@ class Processor
    def new_line line
    end
       
-   def start_parsing
+   def start_parsing name
    end
    
-   def end_parsing
+   def end_parsing name
    end
 end
 ---------------------------------
@@ -231,8 +231,10 @@ end
 * `close_tag`. The same that `open_tag`, but it is called when a tag is closed.
 * `new_line`. Is called every time that a new line is processed, it receives the
     line's contents.
-* `start_parsing`. Is called once at the beginning of the parsing process.
-* `end_parsing`. Is called once after all the input text has been parsed.
+* `start_parsing`. Is called once at the beginning of the parsing process. It 
+    receives the scope name for the syntax being used.
+* `end_parsing`. Is called once after all the input text has been parsed. It 
+    receives the scope name for the syntax being used.
 
 Textpow ensures that the methods are called in parsing order, thus, 
 for example, if there are two subsequent calls to `open_tag`, the first
