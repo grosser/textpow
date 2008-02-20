@@ -14,7 +14,7 @@ module Textpow
             if @proxy_value
                @proxy_value.send(method, *args, &block)
             else
-               STDERR.puts "Failed proxying #{@proxy}.#{m}(#{args.join(', ')})"
+               STDERR.puts "Failed proxying #{@proxy}.#{method}(#{args.join(', ')})"
             end
          end
       end

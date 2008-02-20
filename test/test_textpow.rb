@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'textpow'
 require 'test/unit'
 

@@ -1,3 +1,6 @@
+== 0.10.1 / 2008-02-20
+* FIX: Endless loop in method_missing when @proxy_variable is not present.
+
 == 0.10.0 / 2007-06-15
 * CHANGE: Now the scopeName for the entire syntax is passed to start_parsing and end_parsing. This means that programs using older version should modify their processors accordingly.
 
