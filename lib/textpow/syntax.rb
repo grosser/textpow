@@ -38,7 +38,7 @@ module Textpow
    end
 
    class SyntaxNode
-      OPTIONS = {:options => Oniguruma::OPTION_CAPTURE_GROUP}
+      #OPTIONS = {:options => Oniguruma::OPTION_CAPTURE_GROUP}
       
       @@syntaxes = {}
       
@@ -87,7 +87,8 @@ module Textpow
             case key
             when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
                begin
-                  instance_variable_set( "@#{key}", Oniguruma::ORegexp.new( value, OPTIONS ) )
+                    value.force_encoding("ASCII-8BIT")
+                  instance_variable_set( "@#{key}", Regexp.new( value ) )
                rescue ArgumentError => e
                   raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
                end
@@ -212,8 +213,8 @@ module Textpow
       def match_end string, match, position
          regstring = self.end.clone
          regstring.gsub!( /\\([1-9])/ ) { |s| match[$1.to_i] }
-         regstring.gsub!( /\\k<(.*?)>/ ) { |s| match[$1.to_sym] }
-         Oniguruma::ORegexp.new( regstring ).match( string, position )
+         regstring.gsub!( /\\g<(.*?)>/ ) { |s| match[$1.to_sym] }
+         Regexp.new( regstring ).match( string, position )
       end
       
       def match_first_son string, position
@@ -222,7 +223,7 @@ module Textpow
             self.patterns.each do |p|
                tmatch = p.match_first string, position
                if tmatch
-                  if ! match || match[1].offset.first > tmatch[1].offset.first
+                  if ! match || match[1].offset(0).first > tmatch[1].offset(0).first
                      match = tmatch
                   end
                   #break if tmatch[1].offset.first == position
@@ -251,10 +252,10 @@ module Textpow
                end_match = top.match_end( line, match, position )
             end
             
-            if end_match && ( ! pattern_match || pattern_match.offset.first >= end_match.offset.first )
+            if end_match && ( ! pattern_match || pattern_match.offset(0).first >= end_match.offset(0).first )
                pattern_match = end_match
-               start_pos = pattern_match.offset.first
-               end_pos = pattern_match.offset.last
+               start_pos = pattern_match.offset(0).first
+               end_pos = pattern_match.offset(0).last
                processor.close_tag top.contentName, start_pos if top.contentName && processor
                parse_captures "captures", top, pattern_match, processor if processor
                parse_captures "endCaptures", top, pattern_match, processor if processor
@@ -263,8 +264,8 @@ module Textpow
                top, match = stack.last
             else
                break unless pattern
-               start_pos = pattern_match.offset.first
-               end_pos = pattern_match.offset.last
+               start_pos = pattern_match.offset(0).first
+               end_pos = pattern_match.offset(0).last
                if pattern.begin
                   processor.open_tag pattern.name, start_pos if pattern.name && processor
                   parse_captures "captures", pattern, pattern_match, processor if processor

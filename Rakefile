@@ -26,7 +26,6 @@ begin
       p.rdoc_pattern = /^(lib|bin|ext)|txt$/
       p.changes = p.paragraphs_of('History.txt', 0).join("\n\n")
       p.clean_globs = ["manual/*"]
-      p.extra_deps << ['oniguruma', '>= 1.1.0']
       p.extra_deps << ['plist', '>= 3.0.0']
    end
    

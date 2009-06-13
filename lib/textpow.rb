@@ -1,5 +1,4 @@
 require 'yaml'
-require 'oniguruma'
 require 'textpow/syntax'
 require 'textpow/debug_processor'
 require 'textpow/score_manager'
