@@ -1,13 +1,209 @@
 = Textpow
 
-This is a fixed version of the Textpow library for the 1.9 tree of the Ruby programming language. If you find any bugs, please let me know and I'll get them fixed up as soon as I can.
+* http://github.com/cehoffman/textpow
+* http://github.com/spox/textpow
+* http://textpow.rubyforge.org
 
-== Install
+== DESCRIPTION:
 
-Textpow requires the plist library, that no longer works on 1.9 due to some syntax differences from 1.8. You can find a fixed version at the following location:
+A library for parsing {TextMate}[http://macromates.com/] bundles.
 
-* {plist}[http://github.com/spox/plist]
+== SYNOPSIS:
 
-= Etc.
 
-For textpow information, see the README.txt file for original author information
+Parsing a file using Textpow is as easy as 1-2-3!
+
+1. Load the Syntax File:
+
+  require 'textpow'
+  syntax = Textpow::SyntaxNode.load("ruby.tmSyntax")
+
+2. Initialize a processor:
+
+  processor = Textpow::DebugProcessor.new
+
+3. Parse some text:
+
+  syntax.parse( text,  processor )
+
+
+=== INDEPTH:
+
+At the heart of syntax parsing are ..., well, syntax files. Lets see for instance
+the example syntax that appears in textmate's
+{documentation}[http://macromates.com/textmate/manual/language_grammars#language_grammars]:
+
+
+  {  scopeName = 'source.untitled';
+     fileTypes = ( txt );
+     foldingStartMarker = '\{\s*$';
+     foldingStopMarker = '^\s*\}';
+     patterns = (
+        {  name = 'keyword.control.untitled';
+           match = '\b(if|while|for|return)\b';
+        },
+        {  name = 'string.quoted.double.untitled';
+           begin = '"';
+           end = '"';
+           patterns = (
+              {  name = 'constant.character.escape.untitled';
+                 match = '\\.';
+              }
+           );
+        },
+     );
+  }
+
+But Textpow is not able to parse text pfiles. However, in practice this is not a problem,
+since it is possible to convert both text and binary pfiles to an XML format. Indeed, all
+the syntaxes in the Textmate syntax {repository}[http://macromates.com/svn/Bundles/trunk/Bundles/]
+are in XML format:
+
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+  <dict>
+     <key>scopeName</key>
+     <string>source.untitled</string>
+     <key>fileTypes</key>
+     <array>
+        <string>txt</string>
+     </array>
+     <key>foldingStartMarker</key>
+     <string>\{\s*$</string>
+     <key>foldingStopMarker</key>
+     <string>^\s*\}</string>
+     <key>patterns</key>
+     <array>
+        <dict>
+           <key>name</key>
+           <string>keyword.control.untitled</string>
+           <key>match</key>
+           <string>\b(if|while|for|return)\b</string>
+        </dict>
+        <dict>
+           <key>name</key>
+           <string>string.quoted.double.untitled</string>
+           <key>begin</key>
+           <string>"</string>
+           <key>end</key>
+           <string>"</string>
+           <key>patterns</key>
+           <array>
+              <dict>
+                 <key>name</key>
+                 <string>constant.character.escape.untitled</string>
+                 <key>match</key>
+                 <string>\\.</string>
+              </dict>
+           </array>
+        </dict>
+     </array>
+  </dict>
+
+Of course, most people find XML both ugly and cumbersome. Fortunately, it is
+also possible to store syntax files in YAML format, which is much easier to
+read:
+
+  ---
+  fileTypes:
+  - txt
+  scopeName: source.untitled
+  foldingStartMarker: \{\s*$
+  foldingStopMarker: ^\s*\}
+  patterns:
+  - name: keyword.control.untitled
+    match: \b(if|while|for|return)\b
+  - name: string.quoted.double.untitled
+    begin: '"'
+    end: '"'
+    patterns:
+    - name: constant.character.escape.untitled
+      match: \\.
+
+==== Processors
+
+Until now we have talked about the parsing process without explaining what
+it is exactly. Basically, parsing consists in reading text from a string or
+file and applying tags to parts of the text according to what has been
+specified in the syntax file.
+
+In textpow, the process takes place line by line, from the beginning to the
+end and from left to right for every line. As the text is parsed, events are
+sent to a processor object when a tag is open or closed and so on.
+A processor is any object which implements one or more of the following
+methods:
+
+  class Processor
+     def open_tag name, position
+     end
+
+     def close_tag name, position
+     end
+
+     def new_line line
+     end
+
+     def start_parsing name
+     end
+
+     def end_parsing name
+     end
+  end
+
+* <tt>open_tag</tt>. Is called when a new tag is opened, it receives the tag's name and
+  its position (relative to the current line).
+* <tt>close_tag</tt>. The same that <tt>open_tag</tt>, but it is called when a tag is closed.
+* <tt>new_line</tt>. Is called every time that a new line is processed, it receives the
+  line's contents.
+* <tt>start_parsing</tt>. Is called once at the beginning of the parsing process. It
+  receives the scope name for the syntax being used.
+* <tt>end_parsing</tt>. Is called once after all the input text has been parsed. It
+  receives the scope name for the syntax being used.
+
+Textpow ensures that the methods are called in parsing order, thus,
+for example, if there are two subsequent calls to <tt>open_tag</tt>, the first
+having <tt>name="text.string", position=10</tt> and the second having
+<tt>name="markup.string", position=10</tt>, it should be understood that the
+<tt>"markup.string"</tt> tag is inside the <tt>"text.string"</tt> tag.
+
+== REQUIREMENTS:
+
+* Ruby 1.9
+* spox-plist
+
+== INSTALL:
+
+  gem install textpow
+
+== CREDITS:
+
+* {Spox}[http://github.com/spox]
+* Dizan Vasque
+
+== LICENSE:
+
+(The MIT License)
+
+* Copyright (c) 2010 Chris Hoffman
+* Copyright (c) 2009 Spox
+* Copyright (c) 2007-2008 Dizan Vasquez
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
