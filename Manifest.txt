@@ -3,11 +3,11 @@ bin/plist2syntax
 lib/textpow.rb
 lib/textpow
 lib/textpow/syntax.rb
+lib/textpow/version.rb
 lib/textpow/score_manager.rb
 lib/textpow/debug_processor.rb
-mm/manual.mm
 test/test_textpow.rb
-History.txt
+History.rdoc
 Rakefile
 Manifest.txt
-README.txt
+README.rdoc
