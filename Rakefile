@@ -3,7 +3,9 @@ require 'rubygems'
 begin
    require 'hoe'
    require File.expand_path("../lib/textpow/version", __FILE__)
-      
+
+   Hoe.plugin :gemcutter
+
    Hoe.spec 'textpow' do
       developer("Chris Hoffman", "cehoffman@gmail.com")
       developer("Spox", "spox@modspox.com")
@@ -11,7 +13,8 @@ begin
       
       self.version = Textpow::Version
       self.extra_deps << ['spox-plist', '>= 3.0.0']
-      self.readme = "README.rdoc"
+      self.readme_file  = "README.rdoc"
+      self.history_file = "History.rdoc"
       spec_extras[:required_ruby_version] = ">= 1.9.0"
    end
 
