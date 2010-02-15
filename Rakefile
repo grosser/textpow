@@ -17,6 +17,10 @@ begin
       self.history_file = "History.rdoc"
       spec_extras[:required_ruby_version] = ">= 1.9.0"
    end
+   
+   task :gemspec do
+     sh %{rake debug_gem | grep -v "(in " > `basename \\\`pwd\\\``.gemspec}
+   end
 
 rescue LoadError => e
    desc 'Run the test suite.'
