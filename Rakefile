@@ -12,7 +12,7 @@ begin
       developer("Dizan Vasquez", "dichodaemon@gmail.com")
       
       self.version = Textpow::Version
-      self.extra_deps << ['spox-plist', '>= 3.0.0']
+      self.extra_deps << ['plist', '>= 3.0.1']
       self.readme_file  = "README.rdoc"
       self.history_file = "History.rdoc"
       spec_extras[:required_ruby_version] = ">= 1.9.0"
