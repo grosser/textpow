@@ -213,7 +213,7 @@ module Textpow
       def match_end string, match, position
          regstring = self.end.clone
          regstring.gsub!( /\\([1-9])/ ) { |s| match[$1.to_i] }
-         regstring.gsub!( /\\g<(.*?)>/ ) { |s| match[$1.to_sym] }
+         regstring.gsub!( /\\k<(.*?)>/ ) { |s| match[$1.to_sym] }
          Regexp.new( regstring ).match( string, position )
       end
       
