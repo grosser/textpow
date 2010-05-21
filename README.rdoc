@@ -170,14 +170,15 @@ having <tt>name="text.string", position=10</tt> and the second having
 == REQUIREMENTS:
 
 * Ruby 1.9
-* spox-plist
+* plist > 3.0
 
 == INSTALL:
 
-  gem install textpow
+  gem install textpow19
 
 == CREDITS:
 
+* {Chris Hoffman}[http://github.com/cehoffman]
 * {Spox}[http://github.com/spox]
 * Dizan Vasque
 

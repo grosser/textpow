@@ -6,7 +6,7 @@ begin
 
    Hoe.plugin :gemcutter
 
-   Hoe.spec 'textpow' do
+   Hoe.spec 'textpow19' do
       developer("Chris Hoffman", "cehoffman@gmail.com")
       developer("Spox", "spox@modspox.com")
       developer("Dizan Vasquez", "dichodaemon@gmail.com")
