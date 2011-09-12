@@ -6,7 +6,8 @@ begin
 
   Hoe.plugin :gemcutter
 
-  Hoe.spec 'textpow19' do
+  Hoe.spec 'textpow1x' do
+    developer("Michael Grosser", "michael@grosser.it")
     developer("Chris Hoffman", "cehoffman@gmail.com")
     developer("Spox", "spox@modspox.com")
     developer("Dizan Vasquez", "dichodaemon@gmail.com")
@@ -15,7 +16,6 @@ begin
     self.extra_deps << ['plist', '>= 3.0.1']
     self.readme_file  = "README.rdoc"
     self.history_file = "History.rdoc"
-    spec_extras[:required_ruby_version] = ">= 1.9.0"
   end
 
   task :gemspec do
