@@ -1,3 +1,8 @@
+module Textpow
+  RUBY_19 = (RUBY_VERSION > "1.9.0")
+end
+require 'oniguruma' unless Textpow::RUBY_19
+
 require 'plist'
 
 module Textpow
@@ -37,7 +42,9 @@ module Textpow
   end
 
   class SyntaxNode
-    #OPTIONS = {:options => Oniguruma::OPTION_CAPTURE_GROUP}
+    unless Textpow::RUBY_19
+      OPTIONS = {:options => Oniguruma::OPTION_CAPTURE_GROUP}
+    end
 
     @@syntaxes = {}
 
@@ -86,8 +93,12 @@ module Textpow
         case key
         when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
           begin
-            value.force_encoding("ASCII-8BIT")
-            instance_variable_set( "@#{key}", Regexp.new( value ) )
+            if Textpow::RUBY_19
+              value.force_encoding("ASCII-8BIT")
+              instance_variable_set( "@#{key}", Regexp.new( value ) )
+            else
+              instance_variable_set( "@#{key}", Oniguruma::ORegexp.new( value, OPTIONS ) )
+            end
           rescue ArgumentError => e
             raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
           end
@@ -212,8 +223,14 @@ module Textpow
     def match_end string, match, position
       regstring = self.end.clone
       regstring.gsub!( /\\([1-9])/ ) { |s| match[$1.to_i] }
+
+      # in spox-textpow this is \\g in 1.9 !?
       regstring.gsub!( /\\k<(.*?)>/ ) { |s| match[$1.to_sym] }
-      Regexp.new( regstring ).match( string, position )
+      if Textpow::RUBY_19
+        Regexp.new( regstring ).match( string, position )
+      else
+        Oniguruma::ORegexp.new( regstring ).match( string, position )
+      end
     end
 
     def match_first_son string, position
@@ -222,9 +239,12 @@ module Textpow
         self.patterns.each do |p|
           tmatch = p.match_first string, position
           if tmatch
-            if ! match || match[1].offset(0).first > tmatch[1].offset(0).first
-              match = tmatch
+            ok = if Textpow::RUBY_19
+              ! match || match[1].offset(0).first > tmatch[1].offset(0).first
+            else
+              ! match || match[1].offset.first > tmatch[1].offset.first
             end
+            match = tmatch if ok
             #break if tmatch[1].offset.first == position
           end
         end
@@ -251,10 +271,21 @@ module Textpow
           end_match = top.match_end( line, match, position )
         end
 
-        if end_match && ( ! pattern_match || pattern_match.offset(0).first >= end_match.offset(0).first )
+        ok = if Textpow::RUBY_19
+          end_match && ( ! pattern_match || pattern_match.offset(0).first >= end_match.offset(0).first )
+        else
+          end_match && ( ! pattern_match || pattern_match.offset.first >= end_match.offset.first )
+        end
+
+        if ok
           pattern_match = end_match
-          start_pos = pattern_match.offset(0).first
-          end_pos = pattern_match.offset(0).last
+          if Textpow::RUBY_19
+            start_pos = pattern_match.offset(0).first
+            end_pos = pattern_match.offset(0).last
+          else
+            start_pos = pattern_match.offset.first
+            end_pos = pattern_match.offset.last
+          end
           processor.close_tag top.contentName, start_pos if top.contentName && processor
           parse_captures "captures", top, pattern_match, processor if processor
           parse_captures "endCaptures", top, pattern_match, processor if processor
@@ -263,8 +294,14 @@ module Textpow
           top, match = stack.last
         else
           break unless pattern
-          start_pos = pattern_match.offset(0).first
-          end_pos = pattern_match.offset(0).last
+          if Textpow::RUBY_19
+            start_pos = pattern_match.offset(0).first
+            end_pos = pattern_match.offset(0).last
+          else
+            start_pos = pattern_match.offset.first
+            end_pos = pattern_match.offset.last
+          end
+
           if pattern.begin
             processor.open_tag pattern.name, start_pos if pattern.name && processor
             parse_captures "captures", pattern, pattern_match, processor if processor

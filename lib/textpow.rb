@@ -7,3 +7,4 @@ require 'textpow/version'
 module Textpow
   class ParsingError < Exception; end
 end
+
