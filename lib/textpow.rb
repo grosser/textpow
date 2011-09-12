@@ -4,7 +4,6 @@ require 'textpow/debug_processor'
 require 'textpow/score_manager'
 require 'textpow/version'
 
-
 module Textpow
-   class ParsingError < Exception; end
+  class ParsingError < Exception; end
 end
