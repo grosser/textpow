@@ -1,19 +1,29 @@
+PATH
+  remote: .
+  specs:
+    textpow1x (0.11.0)
+      plist (>= 3.0.1)
+
 GEM
   remote: http://rubygems.org/
   specs:
+    git (1.2.5)
     hoe (2.12.3)
       rake (~> 0.8)
+    jeweler (1.6.4)
+      bundler (~> 1.0)
+      git (>= 1.2.5)
+      rake
     oniguruma (1.1.0)
     plist (3.1.0)
     rake (0.8.7)
-    rdoc (3.9.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   hoe
+  jeweler
   oniguruma
-  plist (>= 3.0.1)
   rake (= 0.8.7)
-  rdoc
+  textpow1x!
