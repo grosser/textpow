@@ -1,28 +1,37 @@
-= Textpow
-
-* http://github.com/cehoffman/textpow
-* http://github.com/spox/textpow
-* http://textpow.rubyforge.org
-
-== DESCRIPTION:
-
 A library for parsing {TextMate}[http://macromates.com/] bundles.
 
-== SYNOPSIS:
+For Ruby 1.8 and 1.9.
 
 
-Parsing a file using Textpow is as easy as 1-2-3!
+== INSTALL:
 
-1. Load the Syntax File:
+  gem install textpow1x
+
+=== Ruby 1.8
+Install oniguruma
+
+  # Ubuntu
+  sudo apt-get -y install libonig-dev
+  gem install oniguruma
+  
+  # OsX (no idea if this works...)
+  port install oniguruma4
+
+
+== USAGE:
+
+1. Get a .tmSyntax File
+
+2. Load the Syntax File:
 
   require 'textpow'
   syntax = Textpow::SyntaxNode.load("ruby.tmSyntax")
 
-2. Initialize a processor:
+3. Initialize a processor:
 
   processor = Textpow::DebugProcessor.new
 
-3. Parse some text:
+4. Parse some text:
 
   syntax.parse( text,  processor )
 
@@ -167,17 +176,9 @@ having <tt>name="text.string", position=10</tt> and the second having
 <tt>name="markup.string", position=10</tt>, it should be understood that the
 <tt>"markup.string"</tt> tag is inside the <tt>"text.string"</tt> tag.
 
-== REQUIREMENTS:
-
-* Ruby 1.9
-* plist > 3.0
-
-== INSTALL:
-
-  gem install textpow19
-
 == CREDITS:
 
+* {Michael Grosser}[http://github.com/grosser]
 * {Chris Hoffman}[http://github.com/cehoffman]
 * {Spox}[http://github.com/spox]
 * Dizan Vasque
@@ -186,6 +187,7 @@ having <tt>name="text.string", position=10</tt> and the second having
 
 (The MIT License)
 
+* Copyright (c) 2011 Michael Grosser
 * Copyright (c) 2010 Chris Hoffman
 * Copyright (c) 2009 Spox
 * Copyright (c) 2007-2008 Dizan Vasquez
