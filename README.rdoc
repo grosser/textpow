@@ -20,18 +20,16 @@ Install oniguruma
 
 == USAGE:
 
-1. Get a .tmSyntax File
-
-2. Load the Syntax File:
+1. Load a Syntax File {list of included syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
 
   require 'textpow'
-  syntax = Textpow::SyntaxNode.load("ruby.tmSyntax")
+  syntax = Textpow::SyntaxNode.load("#{Textpow.syntax_path}/ruby.syntax")
 
-3. Initialize a processor:
+2. Initialize a processor:
 
   processor = Textpow::DebugProcessor.new
 
-4. Parse some text:
+3. Parse some text:
 
   syntax.parse( text,  processor )
 
