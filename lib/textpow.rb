@@ -6,5 +6,9 @@ require 'textpow/version'
 
 module Textpow
   class ParsingError < Exception; end
+
+  def syntax_path
+    File.expand_path(__FILE__, x)
+  end
 end
 
