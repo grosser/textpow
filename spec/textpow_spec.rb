@@ -18,4 +18,17 @@ describe Textpow::ScoreManager do
     sp.score('string.quoted', reference_scope).should > sp.score('source.php', reference_scope)
     sp.score('text source string', reference_scope).should > sp.score( 'source string', reference_scope)
   end
+
+  describe "syntax" do
+    it "has syntax files" do
+      Dir["#{Textpow.syntax_path}/*.syntax"].should_not == []
+    end
+
+    Dir["#{Textpow.syntax_path}/*.syntax"].each do |syntax|
+      it "#{syntax} can parse" do
+        node = Textpow::SyntaxNode.load(syntax)
+        node.parse("xxx\n1 + 1\n### xxx")
+      end
+    end
+  end
 end
