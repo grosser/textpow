@@ -33,7 +33,6 @@ Install oniguruma
 
   syntax.parse( text,  processor )
 
-
 === INDEPTH:
 
 At the heart of syntax parsing are ..., well, syntax files. Lets see for instance

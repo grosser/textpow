@@ -18,8 +18,16 @@ describe Textpow::ScoreManager do
     sp.score('string.quoted', reference_scope).should > sp.score('source.php', reference_scope)
     sp.score('text source string', reference_scope).should > sp.score( 'source string', reference_scope)
   end
+end
 
+describe Textpow do
   describe "syntax" do
+    before do
+      STDERR.stub!(:puts)
+    end
+
+    let(:processor){ Textpow::DebugProcessor.new }
+
     it "has syntax files" do
       Dir["#{Textpow.syntax_path}/*.syntax"].should_not == []
     end
@@ -27,8 +35,14 @@ describe Textpow::ScoreManager do
     Dir["#{Textpow.syntax_path}/*.syntax"].each do |syntax|
       it "#{syntax} can parse" do
         node = Textpow::SyntaxNode.load(syntax)
-        node.parse("xxx\n1 + 1\n### xxx")
+        node.parse("xxx\n1 + 1\n### xxx", processor)
       end
+    end
+
+    # syntax broken in 1.9
+    xit "parses markdown" do
+      node = Textpow::SyntaxNode.load("#{Textpow.syntax_path}/broken/markdown.syntax")
+      node.parse("### xxx\nabc\n    xxx\n    yyy\n - abc\n - ac", processor)
     end
   end
 end
