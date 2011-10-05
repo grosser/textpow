@@ -66,12 +66,32 @@ module Textpow
       SyntaxNode.new(table, nil, name_space)
     end
 
-    def initialize(table, syntax = nil, name_space = :default, options={})
-      @name_space = name_space
-      @@syntaxes[@name_space] ||= {}
-      @@syntaxes[@name_space][table["scopeName"]] = self if table["scopeName"]
+    def initialize(table, syntax = nil, name_space = :default)
       @syntax = syntax || self
+      @name_space = name_space
 
+      register_in_syntaxes(table["scopeName"])
+      parse_and_store_syntax_info(table)
+    end
+
+    def syntaxes
+      @@syntaxes[@name_space]
+    end
+
+    def parse(string, processor = RecordingProcessor.new)
+      processor.start_parsing scopeName
+      stack = [[self, nil]]
+      string.each_line do |line|
+        parse_line stack, line, processor
+      end
+      processor.end_parsing scopeName
+
+      processor
+    end
+
+  protected
+
+    def parse_and_store_syntax_info(table)
       table.each do |key, value|
         case key
         when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
@@ -101,22 +121,11 @@ module Textpow
       end
     end
 
-    def syntaxes
-      @@syntaxes[@name_space]
+    # register in global syntax list -> can be found by include
+    def register_in_syntaxes(scope)
+      @@syntaxes[@name_space] ||= {}
+      @@syntaxes[@name_space][scope] = self if scope
     end
-
-    def parse(string, processor = RecordingProcessor.new)
-      processor.start_parsing scopeName
-      stack = [[self, nil]]
-      string.each_line do |line|
-        parse_line stack, line, processor
-      end
-      processor.end_parsing scopeName
-
-      processor
-    end
-
-  protected
 
     def self.convert_file_to_table(file)
       raise "File not found: #{file}" unless File.exist?(file)
