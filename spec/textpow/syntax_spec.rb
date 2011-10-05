@@ -69,4 +69,31 @@ describe Textpow::SyntaxNode do
       Textpow::SyntaxNode.new({}).syntaxes['xxx'].should == nil
     end
   end
+
+  describe "#parse" do
+    let(:node){ Textpow::SyntaxNode.load('lib/textpow/syntax/ruby.syntax') }
+
+    it "uses a RecordingProcessor by default" do
+      node.parse("111").stack.should == [
+        [:start_parsing, "source.ruby"],
+        [:new_line, "111"],
+        [:open_tag, "constant.numeric.ruby", 0],
+        [:close_tag, "constant.numeric.ruby", 3],
+        [:end_parsing, "source.ruby"]
+      ]
+    end
+
+    it "can parse with a processor" do
+      processor = Textpow::RecordingProcessor.new
+      processor.stack << 'xxx'
+      node.parse("111", processor).stack.should == [
+        "xxx",
+        [:start_parsing, "source.ruby"],
+        [:new_line, "111"],
+        [:open_tag, "constant.numeric.ruby", 0],
+        [:close_tag, "constant.numeric.ruby", 3],
+        [:end_parsing, "source.ruby"]
+      ]
+    end
+  end
 end

@@ -1,6 +1,7 @@
 require 'yaml'
 require 'textpow/syntax'
 require 'textpow/debug_processor'
+require 'textpow/recording_processor'
 require 'textpow/score_manager'
 require 'textpow/version'
 

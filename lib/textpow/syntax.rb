@@ -105,13 +105,14 @@ module Textpow
       @@syntaxes[@name_space]
     end
 
-    def parse( string, processor = nil )
-      processor.start_parsing self.scopeName if processor
+    def parse(string, processor = RecordingProcessor.new)
+      processor.start_parsing scopeName
       stack = [[self, nil]]
       string.each_line do |line|
         parse_line stack, line, processor
       end
-      processor.end_parsing self.scopeName if processor
+      processor.end_parsing scopeName
+
       processor
     end
 
@@ -248,14 +249,14 @@ module Textpow
       match
     end
 
-    def parse_line stack, line, processor
-      processor.new_line line if processor
+    def parse_line(stack, line, processor)
+      processor.new_line line
       top, match = stack.last
       position = 0
       #@ln ||= 0
       #@ln += 1
       #STDERR.puts @ln
-      while true
+      loop do
         if top.patterns
           pattern, pattern_match = top.match_first_son line, position
         else
@@ -282,10 +283,10 @@ module Textpow
             start_pos = pattern_match.offset.first
             end_pos = pattern_match.offset.last
           end
-          processor.close_tag top.contentName, start_pos if top.contentName && processor
-          parse_captures "captures", top, pattern_match, processor if processor
-          parse_captures "endCaptures", top, pattern_match, processor if processor
-          processor.close_tag top.name, end_pos if top.name && processor
+          processor.close_tag top.contentName, start_pos if top.contentName
+          parse_captures "captures", top, pattern_match, processor
+          parse_captures "endCaptures", top, pattern_match, processor
+          processor.close_tag top.name, end_pos if top.name
           stack.pop
           top, match = stack.last
         else
@@ -299,17 +300,17 @@ module Textpow
           end
 
           if pattern.begin
-            processor.open_tag pattern.name, start_pos if pattern.name && processor
-            parse_captures "captures", pattern, pattern_match, processor if processor
-            parse_captures "beginCaptures", pattern, pattern_match, processor if processor
-            processor.open_tag pattern.contentName, end_pos if pattern.contentName && processor
+            processor.open_tag pattern.name, start_pos if pattern.name
+            parse_captures "captures", pattern, pattern_match, processor
+            parse_captures "beginCaptures", pattern, pattern_match, processor
+            processor.open_tag pattern.contentName, end_pos if pattern.contentName
             top = pattern
             match = pattern_match
             stack << [top, match]
           elsif pattern.match
-            processor.open_tag pattern.name, start_pos if pattern.name && processor
-            parse_captures "captures", pattern, pattern_match, processor if processor
-            processor.close_tag pattern.name, end_pos if pattern.name && processor
+            processor.open_tag pattern.name, start_pos if pattern.name
+            parse_captures "captures", pattern, pattern_match, processor
+            processor.close_tag pattern.name, end_pos if pattern.name
           end
         end
         position = end_pos
