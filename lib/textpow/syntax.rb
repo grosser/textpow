@@ -258,12 +258,9 @@ module Textpow
       #STDERR.puts @ln
       loop do
         if top.patterns
-          pattern, pattern_match = top.match_first_son line, position
-        else
-          pattern, pattern_match = nil
+          pattern, pattern_match = top.match_first_son(line, position)
         end
 
-        end_match = nil
         if top.end
           end_match = top.match_end( line, match, position )
         end
@@ -313,6 +310,7 @@ module Textpow
             processor.close_tag pattern.name, end_pos if pattern.name
           end
         end
+
         position = end_pos
       end
     end
