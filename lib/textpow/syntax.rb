@@ -230,17 +230,17 @@ module Textpow
       end
     end
 
-    def match_first_son string, position
+    def match_first_son(string, position)
+      return if not patterns
+
       match = nil
-      if patterns
-        patterns.each do |p|
-          tmatch = p.match_first string, position
-          if tmatch
-            if not match or match_offset(match[1]).first > match_offset(tmatch[1]).first
-              match = tmatch
-            end
-            #break if tmatch[1].offset.first == position
+      patterns.each do |p|
+        tmatch = p.match_first string, position
+        if tmatch
+          if not match or match_offset(match[1]).first > match_offset(tmatch[1]).first
+            match = tmatch
           end
+          #break if tmatch[1].offset.first == position
         end
       end
       match
