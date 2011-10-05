@@ -65,10 +65,9 @@ module Textpow
     attr_accessor :repository
     attr_accessor :patterns
 
-    def self.load(filename, name_space = :default)
-      if table = convert_file_to_table(filename)
-        SyntaxNode.new(table, nil, name_space)
-      end
+    def self.load(file, name_space = :default)
+      table = convert_file_to_table(file)
+      SyntaxNode.new(table, nil, name_space)
     end
 
     def initialize hash, syntax = nil, name_space = :default
@@ -120,6 +119,8 @@ module Textpow
   protected
 
     def self.convert_file_to_table(file)
+      raise "File not found: #{file}" unless File.exist?(file)
+
       case file
       when /(\.tmSyntax|\.plist)$/
         require 'plist'
