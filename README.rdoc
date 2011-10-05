@@ -1,4 +1,4 @@
-A library for parsing {TextMate}[http://macromates.com/] bundles.
+Read {TextMate}[http://macromates.com/] syntax files and parse text with them.
 
 For Ruby 1.8 and 1.9.
 
@@ -31,104 +31,21 @@ Install oniguruma
 
 3. Parse some text:
 
-  syntax.parse( text,  processor )
+  syntax.parse(text,  processor)
 
-=== INDEPTH:
+=== Syntax-files
 
-At the heart of syntax parsing are ..., well, syntax files. Lets see for instance
-the example syntax that appears in textmate's
-{documentation}[http://macromates.com/textmate/manual/language_grammars#language_grammars]:
+Syntax files are written with {Textmate grammer}[http://macromates.com/textmate/manual/language_grammars#language_grammars].
+They are written in text/binary/xml/yaml format (all can be translated into each other).
+Textpow can understand the yaml form (ending in .syntax) and the xml form (ending in .tmSyntax or .plist) via plist library, but not the text or binary form.
+All syntax files shipped with textpow are in the yaml form, since its easiest to read and less verbose.
 
-
-  {  scopeName = 'source.untitled';
-     fileTypes = ( txt );
-     foldingStartMarker = '\{\s*$';
-     foldingStopMarker = '^\s*\}';
-     patterns = (
-        {  name = 'keyword.control.untitled';
-           match = '\b(if|while|for|return)\b';
-        },
-        {  name = 'string.quoted.double.untitled';
-           begin = '"';
-           end = '"';
-           patterns = (
-              {  name = 'constant.character.escape.untitled';
-                 match = '\\.';
-              }
-           );
-        },
-     );
-  }
-
-But Textpow is not able to parse text pfiles. However, in practice this is not a problem,
-since it is possible to convert both text and binary pfiles to an XML format. Indeed, all
-the syntaxes in the Textmate syntax {repository}[http://macromates.com/svn/Bundles/trunk/Bundles/]
-are in XML format:
-
-  <?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-  <plist version="1.0">
-  <dict>
-     <key>scopeName</key>
-     <string>source.untitled</string>
-     <key>fileTypes</key>
-     <array>
-        <string>txt</string>
-     </array>
-     <key>foldingStartMarker</key>
-     <string>\{\s*$</string>
-     <key>foldingStopMarker</key>
-     <string>^\s*\}</string>
-     <key>patterns</key>
-     <array>
-        <dict>
-           <key>name</key>
-           <string>keyword.control.untitled</string>
-           <key>match</key>
-           <string>\b(if|while|for|return)\b</string>
-        </dict>
-        <dict>
-           <key>name</key>
-           <string>string.quoted.double.untitled</string>
-           <key>begin</key>
-           <string>"</string>
-           <key>end</key>
-           <string>"</string>
-           <key>patterns</key>
-           <array>
-              <dict>
-                 <key>name</key>
-                 <string>constant.character.escape.untitled</string>
-                 <key>match</key>
-                 <string>\\.</string>
-              </dict>
-           </array>
-        </dict>
-     </array>
-  </dict>
-
-Of course, most people find XML both ugly and cumbersome. Fortunately, it is
-also possible to store syntax files in YAML format, which is much easier to
-read:
-
-  ---
-  fileTypes:
-  - txt
-  scopeName: source.untitled
-  foldingStartMarker: \{\s*$
-  foldingStopMarker: ^\s*\}
-  patterns:
-  - name: keyword.control.untitled
-    match: \b(if|while|for|return)\b
-  - name: string.quoted.double.untitled
-    begin: '"'
-    end: '"'
-    patterns:
-    - name: constant.character.escape.untitled
-      match: \\.
+Adding a new syntax:
+* use `rake convert[filename]` to convert it into yaml format
+* drop it into the lib/textpow/syntax folder
+* run tests `rake` to see if the syntax is parseable
 
 ==== Processors
-
 Until now we have talked about the parsing process without explaining what
 it is exactly. Basically, parsing consists in reading text from a string or
 file and applying tags to parts of the text according to what has been
