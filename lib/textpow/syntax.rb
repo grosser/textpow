@@ -3,8 +3,6 @@ module Textpow
 end
 require 'oniguruma' unless Textpow::RUBY_19
 
-require 'plist'
-
 module Textpow
   class SyntaxProxy
     def initialize hash, syntax
@@ -68,19 +66,8 @@ module Textpow
     attr_accessor :patterns
 
     def self.load(filename, name_space = :default)
-      table = nil
-      case filename
-      when /(\.tmSyntax|\.plist)$/
-        table = Plist::parse_xml( filename )
-      else
-        File.open( filename ) do |f|
-          table = YAML.load( f )
-        end
-      end
-      if table
-        SyntaxNode.new( table, nil, name_space )
-      else
-        nil
+      if table = convert_file_to_table(filename)
+        SyntaxNode.new(table, nil, name_space)
       end
     end
 
@@ -116,7 +103,6 @@ module Textpow
       end
     end
 
-
     def syntaxes
       @@syntaxes[@name_space]
     end
@@ -131,7 +117,17 @@ module Textpow
       processor
     end
 
-    protected
+  protected
+
+    def self.convert_file_to_table(file)
+      case file
+      when /(\.tmSyntax|\.plist)$/
+        require 'plist'
+        Plist::parse_xml(file)
+      else
+        YAML.load_file(file)
+      end
+    end
 
     def parse_repository repository
       @repository = {}

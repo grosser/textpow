@@ -173,6 +173,12 @@ having <tt>name="text.string", position=10</tt> and the second having
 <tt>name="markup.string", position=10</tt>, it should be understood that the
 <tt>"markup.string"</tt> tag is inside the <tt>"text.string"</tt> tag.
 
+== TODO
+
+* parse json plist files {example}[https://raw.github.com/kangax/textmate-js-language-syntax-file/master/JavaScript.plist]
+* parse tmLanguage files {example}[https://github.com/mattfarina/Ruby-Sass/blob/master/Ruby%20Sass.tmLanguage]
+* allow embedded languages via include directive
+
 == CREDITS:
 
 * {Michael Grosser}[http://github.com/grosser]
