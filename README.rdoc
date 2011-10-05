@@ -41,92 +41,43 @@ Textpow can understand the yaml form (ending in .syntax) and the xml form (endin
 All syntax files shipped with textpow are in the yaml form, since its easiest to read and less verbose.
 
 Adding a new syntax:
-* use `rake convert[filename]` to convert it into yaml format
+* use <tt>rake convert[filename]</tt> to convert it into yaml format
 * drop it into the lib/textpow/syntax folder
-* run tests `rake` to see if the syntax is parseable
+* run tests <tt>rake</tt> to see if the syntax is parseable
 
-==== Processors
-Until now we have talked about the parsing process without explaining what
-it is exactly. Basically, parsing consists in reading text from a string or
-file and applying tags to parts of the text according to what has been
-specified in the syntax file.
+=== Processors
+A processors is a hook that is called while parsing a text.
+It must implement these methods:
 
-In textpow, the process takes place line by line, from the beginning to the
-end and from left to right for every line. As the text is parsed, events are
-sent to a processor object when a tag is open or closed and so on.
-A processor is any object which implements one or more of the following
-methods:
+  class MyProcessor
+    def open_tag(tag_name, position_in_current_line); end
+    def close_tag(tag_name, position_in_current_line); end
 
-  class Processor
-     def open_tag name, position
-     end
+    # called before processing a line
+    def new_line(line_content); end
 
-     def close_tag name, position
-     end
+    # called before parsing anything
+    def start_parsing(scope_name); end
 
-     def new_line line
-     end
-
-     def start_parsing name
-     end
-
-     def end_parsing name
-     end
+    # called before parsing everything
+    def end_parsing(scope_name); end
   end
 
-* <tt>open_tag</tt>. Is called when a new tag is opened, it receives the tag's name and
-  its position (relative to the current line).
-* <tt>close_tag</tt>. The same that <tt>open_tag</tt>, but it is called when a tag is closed.
-* <tt>new_line</tt>. Is called every time that a new line is processed, it receives the
-  line's contents.
-* <tt>start_parsing</tt>. Is called once at the beginning of the parsing process. It
-  receives the scope name for the syntax being used.
-* <tt>end_parsing</tt>. Is called once after all the input text has been parsed. It
-  receives the scope name for the syntax being used.
-
-Textpow ensures that the methods are called in parsing order, thus,
-for example, if there are two subsequent calls to <tt>open_tag</tt>, the first
+Textpow ensures that the methods are called in parsing order.
+If there are two subsequent calls to <tt>open_tag</tt>, the first
 having <tt>name="text.string", position=10</tt> and the second having
-<tt>name="markup.string", position=10</tt>, it should be understood that the
+<tt>name="markup.string", position=10</tt>, it means that the
 <tt>"markup.string"</tt> tag is inside the <tt>"text.string"</tt> tag.
 
 == TODO
 
-* parse json plist files {example}[https://raw.github.com/kangax/textmate-js-language-syntax-file/master/JavaScript.plist]
+* parse text plist files {example}[https://raw.github.com/kangax/textmate-js-language-syntax-file/master/JavaScript.plist]
 * parse tmLanguage files {example}[https://github.com/mattfarina/Ruby-Sass/blob/master/Ruby%20Sass.tmLanguage]
-* allow embedded languages via include directive
+* document / spec / fix include languages (they dont work very well)
 
-== CREDITS:
+== LICENSE: MIT
 
-* {Michael Grosser}[http://github.com/grosser]
-* {Chris Hoffman}[http://github.com/cehoffman]
-* {Spox}[http://github.com/spox]
-* Dizan Vasque
-
-== LICENSE:
-
-(The MIT License)
-
-* Copyright (c) 2011 Michael Grosser
-* Copyright (c) 2010 Chris Hoffman
-* Copyright (c) 2009 Spox
+* Copyright (c) 2011 {Michael Grosser}[http://github.com/grosser]
+* Copyright (c) 2010 {Chris Hoffman}[http://github.com/cehoffman]
+* Copyright (c) 2009 {Spox}[http://github.com/spox]
 * Copyright (c) 2007-2008 Dizan Vasquez
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
