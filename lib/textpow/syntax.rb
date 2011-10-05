@@ -67,7 +67,7 @@ module Textpow
     attr_accessor :repository
     attr_accessor :patterns
 
-    def self.load filename, name_space = :default
+    def self.load(filename, name_space = :default)
       table = nil
       case filename
       when /(\.tmSyntax|\.plist)$/
