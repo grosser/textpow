@@ -232,16 +232,13 @@ module Textpow
 
     def match_first_son string, position
       match = nil
-      if self.patterns
-        self.patterns.each do |p|
+      if patterns
+        patterns.each do |p|
           tmatch = p.match_first string, position
           if tmatch
-            ok = if Textpow::RUBY_19
-              ! match || match[1].offset(0).first > tmatch[1].offset(0).first
-            else
-              ! match || match[1].offset.first > tmatch[1].offset.first
+            if not match or match_offset(match[1]).first > match_offset(tmatch[1]).first
+              match = tmatch
             end
-            match = tmatch if ok
             #break if tmatch[1].offset.first == position
           end
         end
@@ -265,21 +262,11 @@ module Textpow
           end_match = top.match_end( line, match, position )
         end
 
-        ok = if Textpow::RUBY_19
-          end_match && ( ! pattern_match || pattern_match.offset(0).first >= end_match.offset(0).first )
-        else
-          end_match && ( ! pattern_match || pattern_match.offset.first >= end_match.offset.first )
-        end
-
-        if ok
+        if end_match and (not pattern_match or match_offset(pattern_match).first >= match_offset(end_match).first)
           pattern_match = end_match
-          if Textpow::RUBY_19
-            start_pos = pattern_match.offset(0).first
-            end_pos = pattern_match.offset(0).last
-          else
-            start_pos = pattern_match.offset.first
-            end_pos = pattern_match.offset.last
-          end
+          start_pos = match_offset(pattern_match).first
+          end_pos = match_offset(pattern_match).last
+
           processor.close_tag top.contentName, start_pos if top.contentName
           parse_captures "captures", top, pattern_match, processor
           parse_captures "endCaptures", top, pattern_match, processor
@@ -288,13 +275,9 @@ module Textpow
           top, match = stack.last
         else
           break unless pattern
-          if Textpow::RUBY_19
-            start_pos = pattern_match.offset(0).first
-            end_pos = pattern_match.offset(0).last
-          else
-            start_pos = pattern_match.offset.first
-            end_pos = pattern_match.offset.last
-          end
+
+          start_pos = match_offset(pattern_match).first
+          end_pos = match_offset(pattern_match).last
 
           if pattern.begin
             processor.open_tag pattern.name, start_pos if pattern.name
@@ -312,6 +295,14 @@ module Textpow
         end
 
         position = end_pos
+      end
+    end
+
+    def match_offset(match)
+      if Textpow::RUBY_19
+        match.offset(0)
+      else
+        match.offset
       end
     end
   end
