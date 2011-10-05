@@ -40,10 +40,6 @@ module Textpow
   end
 
   class SyntaxNode
-    unless Textpow::RUBY_19
-      OPTIONS = {:options => Oniguruma::OPTION_CAPTURE_GROUP}
-    end
-
     @@syntaxes = {}
 
     attr_accessor :syntax
@@ -70,32 +66,35 @@ module Textpow
       SyntaxNode.new(table, nil, name_space)
     end
 
-    def initialize hash, syntax = nil, name_space = :default
+    def initialize(table, syntax = nil, name_space = :default, options={})
       @name_space = name_space
       @@syntaxes[@name_space] ||= {}
-      @@syntaxes[@name_space][hash["scopeName"]] = self if hash["scopeName"]
+      @@syntaxes[@name_space][table["scopeName"]] = self if table["scopeName"]
       @syntax = syntax || self
-      hash.each do |key, value|
+
+      table.each do |key, value|
         case key
         when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
           begin
-            if Textpow::RUBY_19
+            regex = if Textpow::RUBY_19
               value.force_encoding("ASCII-8BIT")
-              instance_variable_set( "@#{key}", Regexp.new( value ) )
+              Regexp.new(value)
             else
-              instance_variable_set( "@#{key}", Oniguruma::ORegexp.new( value, OPTIONS ) )
+              Oniguruma::ORegexp.new(value, :options => Oniguruma::OPTION_CAPTURE_GROUP)
             end
+            instance_variable_set("@#{key}", regex)
           rescue ArgumentError => e
             raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
           end
         when "content", "fileTypes", "name", "contentName", "end", "scopeName", "keyEquivalent"
-          instance_variable_set( "@#{key}", value )
+          instance_variable_set("@#{key}", value)
         when "captures", "beginCaptures", "endCaptures"
-          instance_variable_set( "@#{key}", value.sort )
+          instance_variable_set("@#{key}", value.sort)
         when "repository"
           parse_repository value
         when "patterns"
           create_children value
+        when "comment"
         else
           STDERR.puts "Ignoring: #{key} => #{value.gsub("\n", "\n>>")}" if $DEBUG
         end
