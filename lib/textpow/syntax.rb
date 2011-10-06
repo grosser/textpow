@@ -239,20 +239,23 @@ module Textpow
       end
     end
 
+    # find earliest matching pattern
     def match_first_son(string, position)
       return if not patterns
 
-      match = nil
-      patterns.each do |p|
-        tmatch = p.match_first string, position
-        if tmatch
-          if not match or match_offset(match[1]).first > match_offset(tmatch[1]).first
-            match = tmatch
-          end
-          #break if tmatch[1].offset.first == position
+      earliest_match = nil
+      earliest_match_offset = nil
+      patterns.each do |pattern|
+        next unless match = pattern.match_first(string, position)
+
+        match_offset = match_offset(match[1]).first
+        if not earliest_match or earliest_match_offset > match_offset
+          earliest_match = match
+          earliest_match_offset = match_offset
         end
       end
-      match
+
+      earliest_match
     end
 
     def parse_line(stack, line, processor)

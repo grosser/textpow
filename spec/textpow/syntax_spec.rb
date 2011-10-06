@@ -112,4 +112,42 @@ describe Textpow::SyntaxNode do
       ]
     end
   end
+
+  describe "#match_first_son" do
+    it "returns nil when patterns are empty" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx'})
+      node.send(:match_first_son, "xxx", 0).should == nil
+    end
+
+    it "matches a pattern" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [
+        {"match" => "xxx", "name" => "foo"}
+      ]})
+      pattern, match = node.send(:match_first_son, "xxxyy", 0)
+      match.to_s.should == 'xxx'
+      pattern.name.should == 'foo'
+    end
+
+    it "matches the first pattern" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [
+        {"match" => "yyy", "name" => "bar"},
+        {"match" => "xxx", "name" => "foo"},
+        {"match" => "zzz", "name" => "baz"},
+      ]})
+      pattern, match = node.send(:match_first_son, "xxxyyyzzz", 0)
+      match.to_s.should == 'xxx'
+      pattern.name.should == 'foo'
+    end
+
+    it "matches the first pattern for equal positions" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [
+        {"match" => "xxx", "name" => "bar"},
+        {"match" => "xxxyyy", "name" => "foo"},
+        {"match" => "xxxyy", "name" => "baz"},
+      ]})
+      pattern, match = node.send(:match_first_son, "xxxyyyzzz", 0)
+      match.to_s.should == 'xxx'
+      pattern.name.should == 'bar'
+    end
+  end
 end
