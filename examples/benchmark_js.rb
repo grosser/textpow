@@ -6,6 +6,6 @@ text = File.read('examples/jquery.js')
 processor = Textpow::RecordingProcessor.new
 
 start = Time.now.to_f
-5.times{ syntax.parse(text,  processor) }
+1.times{ syntax.parse(text,  processor) }
 puts Time.now.to_f - start
 

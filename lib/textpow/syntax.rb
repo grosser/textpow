@@ -249,6 +249,8 @@ module Textpow
         next unless match = pattern.match_first(string, position)
 
         match_offset = match_offset(match[1]).first
+        return match if match_offset == 0 # no need to look any further
+
         if not earliest_match or earliest_match_offset > match_offset
           earliest_match = match
           earliest_match_offset = match_offset
