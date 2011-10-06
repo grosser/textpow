@@ -95,5 +95,21 @@ describe Textpow::SyntaxNode do
         [:end_parsing, "source.ruby"]
       ]
     end
+
+    it "can parse multiline syntax via stack" do
+      node.parse("=begin\n111\n=end").stack.should == [
+        [:start_parsing, "source.ruby"],
+        [:new_line, "=begin\n"],
+        [:open_tag, "comment.block.documentation.ruby", 0],
+        [:open_tag, "punctuation.definition.comment.ruby", 0],
+        [:close_tag, "punctuation.definition.comment.ruby", 6],
+        [:new_line, "111\n"],
+        [:new_line, "=end"],
+        [:open_tag, "punctuation.definition.comment.ruby", 0],
+        [:close_tag, "punctuation.definition.comment.ruby", 4],
+        [:close_tag, "comment.block.documentation.ruby", 4],
+        [:end_parsing, "source.ruby"]
+      ]
+    end
   end
 end
