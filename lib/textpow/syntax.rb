@@ -103,7 +103,7 @@ module Textpow
               Oniguruma::ORegexp.new(value, :options => Oniguruma::OPTION_CAPTURE_GROUP)
             end
             instance_variable_set("@#{key}", regex)
-          rescue ArgumentError => e
+          rescue RegexpError, ArgumentError => e
             raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
           end
         when "content", "fileTypes", "name", "contentName", "end", "scopeName", "keyEquivalent"
