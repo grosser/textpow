@@ -1,10 +1,11 @@
 Read {TextMate}[http://macromates.com/] syntax files and parse text with them.
 
 Improvements over old textpow:
- - Ruby 1.8 and 1.9 support
- - Tested, documented, refactored and made +faster+
- - Added tons of syntax files (li/textpow/syntax)
- - Most included syntaxes work out of the box
+
+* Ruby 1.8 and 1.9 support
+* Tested, documented, refactored and made +faster+
+* Added tons of syntax files (li/textpow/syntax)
+* Most included syntaxes work out of the box
 
 == INSTALL:
 
