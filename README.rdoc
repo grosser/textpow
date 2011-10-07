@@ -4,7 +4,7 @@ Improvements over old textpow:
 
 * Ruby 1.8 and 1.9 support
 * Tested, documented, refactored and made +faster+
-* Added tons of syntax files (li/textpow/syntax)
+* Added tons of syntax files {lib/textpow/syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
 * Most included syntaxes work out of the box
 
 == INSTALL:
@@ -16,18 +16,20 @@ Install oniguruma
 
   # Ubuntu
   sudo apt-get -y install libonig-dev
+
+  # OSX via brew or port
+  brew install onigumura
+  port install oniguruma5
+
+  # Then
   gem install oniguruma
-
-  # OsX (no idea if this works...)
-  port install oniguruma4
-
 
 == USAGE:
 
 1. Load a Syntax File {list of included syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
 
   require 'textpow'
-  syntax = Textpow.syntax('ruby') # or Textpow::Syntax.load(syntax_file)
+  syntax = Textpow.syntax('ruby') # or 'source.ruby' or 'lib/textpow/syntax/source.ruby.syntax'
 
 2. Initialize a processor:
 
