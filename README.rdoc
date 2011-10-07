@@ -23,7 +23,7 @@ Install oniguruma
 1. Load a Syntax File {list of included syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
 
   require 'textpow'
-  syntax = Textpow::SyntaxNode.load("#{Textpow.syntax_path}/ruby.syntax")
+  syntax = Textpow.syntax('ruby') # or Textpow::Syntax.load(syntax_file)
 
 2. Initialize a processor:
 

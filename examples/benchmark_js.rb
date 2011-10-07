@@ -3,7 +3,7 @@
 $LOAD_PATH.unshift 'lib'
 require 'textpow'
 
-syntax = Textpow::SyntaxNode.load("#{Textpow.syntax_path}/javascript.syntax")
+syntax = Textpow.syntax('javascript')
 text = File.read('examples/jquery.js')
 processor = Textpow::RecordingProcessor.new
 
