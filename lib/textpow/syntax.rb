@@ -4,37 +4,32 @@ end
 require 'oniguruma' unless Textpow::RUBY_19
 
 module Textpow
+  # at load time we do not know all patterns / all syntaxes
+  # so we store a proxy, that tries to find the correct syntax at runtime
   class SyntaxProxy
-    def initialize hash, syntax
+    def initialize(included_name, syntax)
       @syntax = syntax
-      @proxy = hash["include"]
+      @included_name = included_name
     end
 
     def method_missing method, *args, &block
-      if @proxy
-        @proxy_value = proxy unless @proxy_value
-        if @proxy_value
-          @proxy_value.send(method, *args, &block)
-        else
-          STDERR.puts "Failed proxying #{@proxy}.#{method}(#{args.join(', ')})"
-        end
+      if @proxy ||= proxy
+        @proxy.send(method, *args, &block)
+      else
+        STDERR.puts "Failed proxying #{@proxy_name}.#{method}(#{args.join(', ')})"
       end
     end
 
+  private
+
     def proxy
-      case @proxy
+      case @included_name
       when /^#/
-        if @syntax.repository && @syntax.repository[@proxy[1..-1]]
-          #puts "Repository"
-          #@table["syntax"].repository.each_key{|k| puts k}
-          return @syntax.repository[@proxy[1..-1]]
-        end
-      when "$self"
-        return @syntax
-      when "$base"
-        return @syntax
+        @syntax.repository and @syntax.repository[@included_name[1..-1]]
+      when "$self", "$base"
+        @syntax
       else
-        return @syntax.syntaxes[@proxy]
+        @syntax.syntaxes[@included_name]
       end
     end
   end
@@ -143,20 +138,19 @@ module Textpow
       @repository = {}
       repository.each do |key, value|
         if value["include"]
-          @repository[key] = SyntaxProxy.new( value, self.syntax )
+          @repository[key] = SyntaxProxy.new(value["include"], syntax)
         else
-          @repository[key] = SyntaxNode.new( value, self.syntax, @name_space )
+          @repository[key] = SyntaxNode.new(value, syntax, @name_space)
         end
       end
     end
 
     def create_children patterns
-      @patterns = []
-      patterns.each do |p|
-        if p["include"]
-          @patterns << SyntaxProxy.new( p, self.syntax )
+      @patterns = patterns.map do |pattern|
+        if pattern["include"]
+          SyntaxProxy.new(pattern["include"], syntax)
         else
-          @patterns << SyntaxNode.new( p, self.syntax, @name_space )
+          SyntaxNode.new(pattern, syntax, @name_space)
         end
       end
     end
