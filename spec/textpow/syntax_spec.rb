@@ -156,4 +156,58 @@ describe Textpow::SyntaxNode do
       pattern.name.should == 'bar'
     end
   end
+
+  describe "proxying" do
+    it "cannot proxy by scopeName if syntax is missing" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [{'include' => 'foo'}]})
+      node.parse('bar').stack.should == [
+        [:start_parsing, "xxx"],
+        [:new_line, "bar"],
+        [:end_parsing, "xxx"]
+      ]
+    end
+
+    it "can proxy by scopeName if syntax is defined (even later)" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [{'include' => 'foo'}]})
+      Textpow::SyntaxNode.new({"scopeName" => 'foo', 'patterns' => [{'name' => 'foo.1', 'match' => 'bar'}]})
+      node.parse('bar').stack.should == [
+        [:start_parsing, "xxx"],
+        [:new_line, "bar"],
+        [:open_tag, "foo.1", 0],
+        [:close_tag, "foo.1", 3],
+        [:end_parsing, "xxx"]
+      ]
+    end
+
+    it "can proxy to a pattern defined in an repository" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx',
+        'repository' => {'foo' => {'name' => 'foo.1', 'match' => 'bar'}},
+        'patterns' => [{'include' => '#foo'}]
+      })
+      node.parse('bar').stack.should == [
+        [:start_parsing, "xxx"],
+        [:new_line, "bar"],
+        [:open_tag, "foo.1", 0],
+        [:close_tag, "foo.1", 3],
+        [:end_parsing, "xxx"]
+      ]
+    end
+
+    it "can proxy to a pattern nested included in an repository" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx',
+        'repository' => {
+          'baz' => {'patterns' => [{'include' => '#foo'}]},
+          'foo' => {'name' => 'foo.1', 'match' => 'bar'}
+        },
+        'patterns' => [{'include' => '#baz'}]
+      })
+      node.parse('bar').stack.should == [
+        [:start_parsing, "xxx"],
+        [:new_line, "bar"],
+        [:open_tag, "foo.1", 0],
+        [:close_tag, "foo.1", 3],
+        [:end_parsing, "xxx"]
+      ]
+    end
+  end
 end
