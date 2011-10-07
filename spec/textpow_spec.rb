@@ -17,6 +17,10 @@ describe Textpow do
   end
 
   describe "syntax" do
+    it "finds syntax by path" do
+      Textpow.syntax('lib/textpow/syntax/source.ruby.syntax').name.should == 'Ruby'
+    end
+
     it "finds a syntax by scopeName" do
       Textpow.syntax('source.ruby').name.should == 'Ruby'
     end

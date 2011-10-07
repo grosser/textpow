@@ -1,7 +1,10 @@
 Read {TextMate}[http://macromates.com/] syntax files and parse text with them.
 
-For Ruby 1.8 and 1.9.
-
+Improvements over old textpow:
+ - Ruby 1.8 and 1.9 support
+ - Tested, documented, refactored and made +faster+
+ - Added tons of syntax files (li/textpow/syntax)
+ - Most included syntaxes work out of the box
 
 == INSTALL:
 
@@ -13,7 +16,7 @@ Install oniguruma
   # Ubuntu
   sudo apt-get -y install libonig-dev
   gem install oniguruma
-  
+
   # OsX (no idea if this works...)
   port install oniguruma4
 

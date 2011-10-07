@@ -24,17 +24,27 @@ module Textpow
 
 private
 
-  def self.uncached_syntax(syntax_name)
-    # try by scopeName
-    file = File.join(syntax_path, "#{syntax_name}.syntax".downcase)
+  def self.uncached_syntax(name)
+    path = (
+      find_syntax_by_path(name) ||
+      find_syntax_by_scope_name(name) ||
+      find_syntax_by_fuzzy_name(name)
+    )
+    SyntaxNode.load(path) if path
+  end
 
-    # try by language name
-    if not File.exist?(file)
-      file = Dir.glob(File.join(syntax_path, "*.#{syntax_name}.*")).sort_by(&:size).first
-      return if not file or not File.exist?(file)
-    end
+  def self.find_syntax_by_scope_name(name)
+    path = File.join(syntax_path, "#{name}.syntax")
+    path if File.exist?(path)
+  end
 
-    SyntaxNode.load(file)
+  def self.find_syntax_by_fuzzy_name(name)
+    path = Dir.glob(File.join(syntax_path, "*.#{name}.*")).sort_by(&:size).first
+    path if path and File.exist?(path)
+  end
+
+  def self.find_syntax_by_path(path)
+    path if File.exist?(path)
   end
 end
 
