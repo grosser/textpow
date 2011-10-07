@@ -14,7 +14,7 @@ fileTypes:
 - scriptSuite
 - scriptTerminology
 - savedSearch
-scopeName: ""
+scopeName: "text.plist"
 repository: 
   openstep_comment: 
     patterns: 

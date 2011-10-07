@@ -13,8 +13,17 @@ module Textpow
   end
 
   def self.syntax(syntax_name)
+    syntax_name = syntax_name.downcase
+
+    # try by scopeName
     file = File.join(syntax_path, "#{syntax_name}.syntax".downcase)
-    return unless File.exist?(file)
+
+    # try by language name
+    if not File.exist?(file)
+      file = Dir[File.join(syntax_path, "*.#{syntax_name}.*")].sort_by(&:size).first
+      return if not file or not File.exist?(file)
+    end
+
     SyntaxNode.load(file)
   end
 end

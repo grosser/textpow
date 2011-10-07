@@ -11,7 +11,7 @@ describe Textpow::SyntaxNode do
     end
 
     it "can load from yaml .syntax" do
-      Textpow::SyntaxNode.load('lib/textpow/syntax/ruby.syntax').should_not == nil
+      Textpow::SyntaxNode.load('lib/textpow/syntax/source.ruby.syntax').should_not == nil
     end
 
     it "cannot load missing file" do
