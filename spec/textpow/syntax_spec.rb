@@ -71,7 +71,7 @@ describe Textpow::SyntaxNode do
   end
 
   describe "#parse" do
-    let(:node){ Textpow::SyntaxNode.load('lib/textpow/syntax/ruby.syntax') }
+    let(:node){ Textpow.syntax('ruby') }
 
     it "uses a RecordingProcessor by default" do
       node.parse("111").stack.should == [
@@ -110,6 +110,12 @@ describe Textpow::SyntaxNode do
         [:close_tag, "comment.block.documentation.ruby", 4],
         [:end_parsing, "source.ruby"]
       ]
+    end
+
+    it "loads included syntax files" do
+      pending
+      node = Textpow.syntax('html_rails')
+      node.parse("<br/>")
     end
   end
 
