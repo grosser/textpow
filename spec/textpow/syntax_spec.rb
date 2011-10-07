@@ -168,7 +168,18 @@ describe Textpow::SyntaxNode do
       ]
     end
 
-    it "can proxy by scopeName if syntax is defined (even later)" do
+    it "can proxy by scopeName if syntax is available in repo" do
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [{'include' => 'source.ruby'}]})
+      node.parse('1').stack.should == [
+        [:start_parsing, "xxx"],
+        [:new_line, "1"],
+        [:open_tag, "constant.numeric.ruby", 0],
+        [:close_tag, "constant.numeric.ruby", 1],
+        [:end_parsing, "xxx"]
+      ]
+    end
+
+    it "can proxy by scopeName if syntax is loaded (even later)" do
       node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [{'include' => 'foo'}]})
       Textpow::SyntaxNode.new({"scopeName" => 'foo', 'patterns' => [{'name' => 'foo.1', 'match' => 'bar'}]})
       node.parse('bar').stack.should == [

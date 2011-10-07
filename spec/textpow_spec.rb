@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Textpow do
+  before do
+    Textpow.send(:class_variable_set, "@@syntax", {})
+  end
+
   it "has a version" do
     Textpow::Version =~ /^\d\.\d\.\d$/
   end
@@ -17,6 +21,12 @@ describe Textpow do
       Textpow.syntax('source.ruby').name.should == 'Ruby'
     end
 
+    it "caches found syntax" do
+      Textpow.syntax('ruby').name.should == 'Ruby'
+      Dir.should_not_receive(:glob)
+      Textpow.syntax('ruby').name.should == 'Ruby'
+    end
+
     it "finds a syntax by name parts" do
       Textpow.syntax('ruby').name.should == 'Ruby'
     end
@@ -26,6 +36,13 @@ describe Textpow do
     end
 
     it "returns nil for unfound syntax" do
+      Textpow.syntax('buby').should == nil
+    end
+
+    it "caches nil for unfound syntax" do
+      Dir.should_receive(:glob).and_return []
+      Textpow.syntax('buby').should == nil
+      Dir.should_not_receive(:glob)
       Textpow.syntax('buby').should == nil
     end
   end

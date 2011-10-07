@@ -29,7 +29,7 @@ module Textpow
       when "$self", "$base"
         @syntax
       else
-        @syntax.syntaxes[@included_name]
+        @syntax.syntaxes[@included_name] || Textpow.syntax(@included_name)
       end
     end
   end
