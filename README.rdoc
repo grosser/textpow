@@ -5,7 +5,7 @@ Improvements over old textpow:
 * Ruby 1.8 and 1.9 support
 * Tested, documented, refactored and made +faster+
 * Added tons of syntax files {lib/textpow/syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
-* Most included syntaxes work out of the box
+* Most nested ("include") syntaxes work out of the box
 
 == INSTALL:
 
