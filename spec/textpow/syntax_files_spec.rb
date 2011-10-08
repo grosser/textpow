@@ -5,22 +5,18 @@ describe "syntax files" do
     STDERR.stub!(:puts)
   end
 
-  let(:processor){ Textpow::DebugProcessor.new }
-
   it "has syntax files" do
     Dir["#{Textpow.syntax_path}/*.syntax"].should_not == []
   end
 
   Dir["#{Textpow.syntax_path}/*.syntax"].each do |syntax|
     it "#{syntax} can parse" do
-      node = Textpow::SyntaxNode.load(syntax)
-      node.parse("xxx\n1 + 1\n### xxx", processor)
+      Textpow.syntax(syntax).parse("xxx\n1 + 1\n### xxx")
     end
   end
 
-  # syntax broken in 1.9
   xit "parses markdown" do
-    node = Textpow::SyntaxNode.load("#{Textpow.syntax_path}/broken/markdown.syntax")
-    node.parse("### xxx\nabc\n    xxx\n    yyy\n - abc\n - ac", processor)
+    node = Textpow.syntax("lib/textpow/syntax/broken/markdown.syntax")
+    node.parse("### xxx\nabc\n    xxx\nyyy\n - abc\n - ac").stack.should_not == []
   end
 end
