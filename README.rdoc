@@ -43,12 +43,12 @@ Install oniguruma
 
 Syntax files are written with {Textmate grammer}[http://macromates.com/textmate/manual/language_grammars#language_grammars].
 They are written in text/binary/xml/yaml format (all can be translated into each other).
-Textpow can understand the yaml form (ending in .syntax) and the xml form (ending in .tmSyntax or .plist) via plist library, but not the text or binary form.
+Textpow can understand the yaml form (ending in .syntax) and the xml form (ending in .tmSyntax or .plist or tmLanguage) via plist library, but not the text or binary form.
 All syntax files shipped with textpow are in the yaml form, since its easiest to read and less verbose.
 
 Adding a new syntax:
-* use <tt>rake convert[filename]</tt> to convert it into yaml format
-* drop it into the lib/textpow/syntax folder
+* add download location and scopeName to update_syntax task in Rakefile
+* <tt>rake update_syntax</tt>
 * run tests <tt>rake</tt> to see if the syntax is parseable
 
 === Processors
@@ -76,10 +76,8 @@ having <tt>name="text.string", position=10</tt> and the second having
 <tt>"markup.string"</tt> tag is inside the <tt>"text.string"</tt> tag.
 
 == TODO
-
 * parse text plist files {example}[https://raw.github.com/kangax/textmate-js-language-syntax-file/master/JavaScript.plist]
-* parse tmLanguage files {example}[https://github.com/mattfarina/Ruby-Sass/blob/master/Ruby%20Sass.tmLanguage]
-* document / spec / fix include languages (they dont work very well)
+* update more of the old languages
 
 == LICENSE: MIT
 
