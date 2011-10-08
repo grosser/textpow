@@ -56,9 +56,9 @@ module Textpow
     attr_accessor :repository
     attr_accessor :patterns
 
-    def self.load(file, name_space = :default)
+    def self.load(file, options={})
       table = convert_file_to_table(file)
-      SyntaxNode.new(table, :name_space => name_space)
+      SyntaxNode.new(table, options)
     end
 
     def initialize(table, options={})
