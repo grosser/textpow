@@ -52,7 +52,7 @@ describe Textpow::SyntaxNode do
     end
 
     it "stores given parent" do
-      node = Textpow::SyntaxNode.new({}, 1)
+      node = Textpow::SyntaxNode.new({}, :syntax => 1)
       node.syntax.should == 1
     end
 
@@ -63,9 +63,9 @@ describe Textpow::SyntaxNode do
     end
 
     it "stores itself in scoped global namespace under scopeName" do
-      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx'}, nil, 'foo')
+      node = Textpow::SyntaxNode.new({"scopeName" => 'xxx'}, :name_space => 'foo')
       node.syntaxes['xxx'].should == node
-      Textpow::SyntaxNode.new({},nil,'foo').syntaxes['xxx'].should == node
+      Textpow::SyntaxNode.new({},:name_space => 'foo').syntaxes['xxx'].should == node
       Textpow::SyntaxNode.new({}).syntaxes['xxx'].should == nil
     end
   end

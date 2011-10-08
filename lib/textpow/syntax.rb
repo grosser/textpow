@@ -58,12 +58,12 @@ module Textpow
 
     def self.load(file, name_space = :default)
       table = convert_file_to_table(file)
-      SyntaxNode.new(table, nil, name_space)
+      SyntaxNode.new(table, :name_space => name_space)
     end
 
-    def initialize(table, syntax = nil, name_space = :default)
-      @syntax = syntax || self
-      @name_space = name_space
+    def initialize(table, options={})
+      @syntax = options[:syntax] || self
+      @name_space = options[:name_space]
 
       register_in_syntaxes(table["scopeName"])
       parse_and_store_syntax_info(table)
@@ -134,23 +134,23 @@ module Textpow
       end
     end
 
-    def parse_repository repository
+    def parse_repository(repository)
       @repository = {}
       repository.each do |key, value|
         if value["include"]
           @repository[key] = SyntaxProxy.new(value["include"], syntax)
         else
-          @repository[key] = SyntaxNode.new(value, syntax, @name_space)
+          @repository[key] = SyntaxNode.new(value, :syntax => syntax, :name_space => @name_space)
         end
       end
     end
 
-    def create_children patterns
+    def create_children(patterns)
       @patterns = patterns.map do |pattern|
         if pattern["include"]
           SyntaxProxy.new(pattern["include"], syntax)
         else
-          SyntaxNode.new(pattern, syntax, @name_space)
+          SyntaxNode.new(pattern, :syntax => syntax, :name_space => @name_space)
         end
       end
     end
