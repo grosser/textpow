@@ -159,7 +159,7 @@ describe Textpow::SyntaxNode do
 
   describe "proxying" do
     it "cannot proxy by scopeName if syntax is missing" do
-      STDERR.should_receive(:puts)
+      STDERR.should_not_receive(:puts)
       node = Textpow::SyntaxNode.new({"scopeName" => 'xxx', 'patterns' => [{'include' => 'foo'}]})
       node.parse('bar').stack.should == [
         [:start_parsing, "xxx"],

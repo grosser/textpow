@@ -16,7 +16,7 @@ module Textpow
       if @proxy ||= proxy
         @proxy.send(method, *args, &block)
       else
-        STDERR.puts "Failed proxying #{@proxy_name}.#{method}(#{args.join(', ')})"
+        STDERR.puts "Failed proxying #{@proxy_name}.#{method}(#{args.join(', ')})" if $DEBUG
       end
     end
 
