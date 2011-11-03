@@ -44,7 +44,7 @@ private
   end
 
   def self.find_syntax_by_path(path)
-    path if File.exist?(path)
+    path if File.file?(path)
   end
 end
 

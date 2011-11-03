@@ -43,6 +43,10 @@ describe Textpow do
       Textpow.syntax('buby').should == nil
     end
 
+    it "does not find directories" do
+      Textpow.syntax('lib').should == nil
+    end
+
     it "caches nil for unfound syntax" do
       Dir.should_receive(:glob).and_return []
       Textpow.syntax('buby').should == nil
