@@ -10,8 +10,12 @@ describe "syntax files" do
   end
 
   Dir["#{Textpow.syntax_path}/*.syntax"].each do |syntax|
-    it "#{syntax} can parse" do
+    it "can parse with #{syntax}" do
       Textpow.syntax(syntax).parse("xxx\n1 + 1\n### xxx")
+    end
+
+    it "can parse UTF-8 with #{syntax}" do
+      Textpow.syntax(syntax).parse(File.read("spec/fixtures/utf8.txt"))
     end
   end
 

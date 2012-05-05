@@ -92,7 +92,6 @@ module Textpow
         when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
           begin
             regex = if Textpow::RUBY_19
-              value.force_encoding("ASCII-8BIT")
               Regexp.new(value)
             else
               Oniguruma::ORegexp.new(value, :options => Oniguruma::OPTION_CAPTURE_GROUP)
@@ -124,7 +123,6 @@ module Textpow
 
     def self.convert_file_to_table(file)
       raise "File not found: #{file}" unless File.exist?(file)
-
       case file
       when /(\.tmSyntax|\.plist)$/
         require 'plist'
