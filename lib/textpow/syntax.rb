@@ -90,16 +90,7 @@ module Textpow
       table.each do |key, value|
         case key
         when "firstLineMatch", "foldingStartMarker", "foldingStopMarker", "match", "begin"
-          begin
-            regex = if Textpow::RUBY_19
-              Regexp.new(value)
-            else
-              Oniguruma::ORegexp.new(value, :options => Oniguruma::OPTION_CAPTURE_GROUP)
-            end
-            instance_variable_set("@#{key}", regex)
-          rescue RegexpError, ArgumentError => e
-            raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
-          end
+          instance_variable_set("@#{key}", parse_regex(value))
         when "content", "fileTypes", "name", "contentName", "end", "scopeName", "keyEquivalent"
           instance_variable_set("@#{key}", value)
         when "captures", "beginCaptures", "endCaptures"
@@ -112,6 +103,27 @@ module Textpow
         else
           STDERR.puts "Ignoring: #{key} => #{value.gsub("\n", "\n>>")}" if $DEBUG
         end
+      end
+    end
+
+    def parse_regex(value)
+      if Textpow::RUBY_19
+        parse_regex_with_invalid_chars(value)
+      else
+        Oniguruma::ORegexp.new(value, :options => Oniguruma::OPTION_CAPTURE_GROUP)
+      end
+    rescue RegexpError, ArgumentError => e
+      raise ParsingError, "Parsing error in #{value}: #{e.to_s}"
+    end
+
+    def parse_regex_with_invalid_chars(value)
+      Regexp.new(value.force_encoding('UTF-8'))
+    rescue RegexpError => e
+      if e.message =~ /UTF-8/ or e.message =~ /invalid multibyte escape/
+        puts "Ignored utf8 regex error #{$!}"
+        /INVALID_UTF8/
+      else
+        raise e
       end
     end
 
