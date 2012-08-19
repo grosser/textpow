@@ -1,15 +1,8 @@
 Read {TextMate}[http://macromates.com/] syntax files and parse text with them.
 
-Improvements over old textpow:
-
-* Ruby 1.8 and 1.9 support
-* Tested, documented, refactored and made +faster+
-* Added tons of syntax files {lib/textpow/syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
-* Most nested ("include") syntaxes work out of the box
-
 == INSTALL:
 
-  gem install textpow1x
+  gem install textpow
 
 === Ruby 1.8
 Install oniguruma

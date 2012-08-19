@@ -1,5 +1,4 @@
-require "bundler"
-Bundler::GemHelper.install_tasks
+require "bundler/gem_tasks"
 
 task :default do
   sh "rspec spec/"
@@ -10,6 +9,7 @@ task :convert, :in, :out do |t,args|
   convert(args[:in], args[:out] || 'out.syntax')
 end
 
+# extracted from https://github.com/grosser/project_template
 rule /^version:bump:.*/ do |t|
   sh "git status | grep 'nothing to commit'" # ensure we are not dirty
   index = ['major', 'minor','patch'].index(t.name.split(':').last)
@@ -18,6 +18,8 @@ rule /^version:bump:.*/ do |t|
   version_file = File.read(file)
   old_version, *version_parts = version_file.match(/(\d+)\.(\d+)\.(\d+)/).to_a
   version_parts[index] = version_parts[index].to_i + 1
+  version_parts[2] = 0 if index < 2 # remove patch for minor
+  version_parts[1] = 0 if index < 1 # remove minor for major
   new_version = version_parts * '.'
   File.open(file,'w'){|f| f.write(version_file.sub(old_version, new_version)) }
 

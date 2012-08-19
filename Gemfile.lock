@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    textpow1x (1.2.5)
+    textpow (1.2.5)
       plist (>= 3.0.1)
 
 GEM
@@ -27,4 +27,4 @@ DEPENDENCIES
   oniguruma
   rake (= 0.8.7)
   rspec
-  textpow1x!
+  textpow!
