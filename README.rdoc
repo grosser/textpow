@@ -19,7 +19,7 @@ Install oniguruma
 
 == Demo
 * {Ultraviolet}[http://grosser.github.com/ultraviolet/] uses testpow to generate html syntax highlighting
-* {Ruco (Ruby commandline editor)}{https://github.com/grosser/ruco} uses textpow to colorize the console
+* {Ruco (Ruby commandline editor)}[https://github.com/grosser/ruco] uses textpow to colorize the console
 
 == USAGE:
 
@@ -84,3 +84,5 @@ having <tt>name="text.string", position=10</tt> and the second having
 * Copyright (c) 2010 {Chris Hoffman}[http://github.com/cehoffman]
 * Copyright (c) 2009 {Spox}[http://github.com/spox]
 * Copyright (c) 2007-2008 Dizan Vasquez
+
+{<img src="https://secure.travis-ci.org/grosser/textpow.png" />}[http://travis-ci.org/grosser/textpow]
