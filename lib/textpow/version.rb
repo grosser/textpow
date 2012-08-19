@@ -1,3 +1,3 @@
 module Textpow
-  VERSION = Version = "1.2.5"
+  VERSION = Version = "1.3.0"
 end
