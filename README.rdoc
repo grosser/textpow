@@ -17,6 +17,10 @@ Install oniguruma
   # Then
   gem install oniguruma
 
+== Demo
+* {Ultraviolet}[http://grosser.github.com/ultraviolet/] uses testpow to generate html syntax highlighting
+* {Ruco (Ruby commandline editor)}{https://github.com/grosser/ruco} uses textpow to colorize the console
+
 == USAGE:
 
 1. Load a Syntax File {list of included syntax}[https://github.com/grosser/textpow/tree/master/lib/textpow/syntax]
