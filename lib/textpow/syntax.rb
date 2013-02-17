@@ -135,13 +135,15 @@ module Textpow
 
     def self.convert_file_to_table(file)
       raise "File not found: #{file}" unless File.exist?(file)
-      case file
+      table = case file
       when /(\.tmSyntax|\.plist)$/
         require 'plist'
         Plist::parse_xml(file)
       else
         YAML.load_file(file)
       end
+      raise "Could not parse file #{file} to a table" if table.is_a?(String)
+      table
     end
 
     def parse_repository(repository)

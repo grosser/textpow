@@ -21,6 +21,16 @@ describe Textpow do
       Textpow.syntax('lib/textpow/syntax/source.ruby.syntax').name.should == 'Ruby'
     end
 
+    it "finds syntax by path with capital letters" do
+      Textpow.syntax('spec/fixtures/objeck.tmSyntax').class.should == Textpow::SyntaxNode
+    end
+
+    it "complains about unreadable files" do
+      expect{
+        Textpow.syntax('Rakefile')
+      }.to raise_error(/Could not parse file Rakefile/)
+    end
+
     it "finds a syntax by scopeName" do
       Textpow.syntax('source.ruby').name.should == 'Ruby'
     end

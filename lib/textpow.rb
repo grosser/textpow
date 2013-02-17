@@ -14,11 +14,11 @@ module Textpow
 
   @@syntax = {}
   def self.syntax(syntax_name)
-    syntax_name = syntax_name.downcase
-    if @@syntax.has_key?(syntax_name)
-      @@syntax[syntax_name]
+    key = syntax_name.downcase
+    if @@syntax.has_key?(key)
+      @@syntax[key]
     else
-      @@syntax[syntax_name] = uncached_syntax(syntax_name)
+      @@syntax[key] = uncached_syntax(syntax_name)
     end
   end
 
@@ -27,8 +27,8 @@ private
   def self.uncached_syntax(name)
     path = (
       find_syntax_by_path(name) ||
-      find_syntax_by_scope_name(name) ||
-      find_syntax_by_fuzzy_name(name)
+      find_syntax_by_scope_name(name.downcase) ||
+      find_syntax_by_fuzzy_name(name.downcase)
     )
     SyntaxNode.load(path) if path
   end
