@@ -179,7 +179,7 @@ module Textpow
 
 #          STDERR.puts '-' * 100
 #          starts.sort!.reverse!.each{|c| STDERR.puts c.join(', ')}
-#          STDERR.puts 
+#          STDERR.puts
 #          ends.sort!.reverse!.each{|c| STDERR.puts c.join(', ')}
       starts.sort!.reverse!
       ends.sort!.reverse!
@@ -238,11 +238,13 @@ module Textpow
 
       # in spox-textpow this is \\g in 1.9 !?
       regstring.gsub!( /\\k<(.*?)>/ ) { |s| match[$1.to_sym] }
-      if Textpow::RUBY_19
-        Regexp.new( regstring ).match( string, position )
+      klass = if Textpow::RUBY_19
+        Regexp
       else
-        Oniguruma::ORegexp.new( regstring ).match( string, position )
+        Oniguruma::ORegexp
       end
+      flag = (regstring.include?("\xff") ? "n" : nil)
+      klass.new( regstring, nil, flag ).match( string, position )
     end
 
     # find earliest matching pattern
