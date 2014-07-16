@@ -89,7 +89,7 @@ repository:
           name: punctuation.definition.link.twiki
         "5": 
           name: string.other.link.title.twiki
-      match: (\[)([^]]*)(\]) *(\[)(.*?)(\])
+      match: (\[)([^\]]*)(\]) *(\[)(.*?)(\])
   numlist-paragraph: 
     patterns: 
     - name: markup.list.numbered.paragraph

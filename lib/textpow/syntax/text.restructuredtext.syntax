@@ -25,7 +25,7 @@ repository:
           name: punctuation.definition.directive.restructuredtext
         "2": 
           name: punctuation.separator.key-value.restructuredtext
-      match: (\.\.)\s[A-z][A-z0-9-_]+(::)\s*$
+      match: (\.\.)\s[A-z][A-z0-9\-_]+(::)\s*$
       comment: directives
     - name: meta.raw.block.restructuredtext
       captures: 

@@ -91,7 +91,7 @@ repository:
     captures: 
       "2": 
         name: punctuation.separator.key-value.tt
-    match: \b([a-zA-Z-_:]+)\s*(=)
+    match: \b([a-zA-Z\-_:]+)\s*(=)
   keyword: 
     name: string.unquoted.tt
     match: \b([A-Za-z0-9_]+)

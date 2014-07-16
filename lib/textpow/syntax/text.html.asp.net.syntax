@@ -203,7 +203,7 @@ repository:
       - include: source.asp.vb.net
   tag-generic-attribute: 
     name: entity.other.attribute-name.html
-    match: \b([a-zA-Z-:]+)
+    match: \b([a-zA-Z\-:]+)
   ruby: 
     name: source.ruby.embedded.html
     endCaptures: 

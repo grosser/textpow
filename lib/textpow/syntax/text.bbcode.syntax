@@ -223,7 +223,7 @@ patterns:
   contentName: markup.underline.link.bbcode
   end: (\[/)(?i:url)(\])
   patterns: 
-  - match: "[\\[]]+"
+  - match: "[\\[\\]]+"
 - name: meta.link.inline.bbcode
   captures: 
     "0": 
@@ -236,7 +236,7 @@ patterns:
   contentName: markup.underline.link.email.bbcode
   end: (\[/)(?i:email)(\])
   patterns: 
-  - match: "[\\[]]+"
+  - match: "[\\[\\]]+"
 - name: meta.link.image.bbcode
   endCaptures: 
     "0": 
@@ -260,7 +260,7 @@ patterns:
       name: punctuation.definition.tag.bbcode
   end: (\[/)(?i:img)(\])
   patterns: 
-  - match: "[\\[]]+?"
+  - match: "[\\[\\]]+?"
 - name: constant.other.smiley.bbcode
   captures: 
     "3": 

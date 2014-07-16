@@ -113,7 +113,7 @@ repository:
     - include: "#entities"
   tag-generic-attribute: 
     name: entity.other.attribute-name.html
-    match: \b([a-zA-Z-_:]+)
+    match: \b([a-zA-Z\-_:]+)
   ruby: 
     name: source.ruby.embedded.html
     captures: 

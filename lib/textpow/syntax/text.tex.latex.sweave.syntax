@@ -5,10 +5,10 @@ fileTypes:
 - Rnw
 - snw
 - rnw
-firstLineMatch: ^\\documentclass(?!.*\{beamer\})|^<<(.?*)>>=$
+firstLineMatch: ^\\documentclass(?!.*\{beamer\})|^<<(.*)>>=$
 scopeName: text.tex.latex.sweave
 uuid: 1F450973-8259-4BA2-A754-48C634561A13
-foldingStartMarker: ^<<(.?*)>>=|\\begin\{.*\}
+foldingStartMarker: ^<<(.*)>>=|\\begin\{.*\}
 patterns: 
 - name: meta.block.parameters.sweave
   endCaptures: 
@@ -80,5 +80,5 @@ patterns:
   patterns: 
   - include: source.r
 - include: text.tex.latex
-foldingStopMarker: ^@(.?*)$|\\end\{.*\}
+foldingStopMarker: ^@(.*)$|\\end\{.*\}
 keyEquivalent: ^~S
