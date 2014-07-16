@@ -78,6 +78,26 @@ having <tt>name="text.string", position=10</tt> and the second having
 * parse text plist files {example}[https://raw.github.com/kangax/textmate-js-language-syntax-file/master/JavaScript.plist]
 * update more languages via github urls
 
+== Examples of uses
+
+* Textpow is used by the Ultraviolet gem
+  http://rubygems.org/gems/ultraviolet
+
+* The Ultraviolet gem is used by the Redmine_ultraviolet plugin
+  https://github.com/jbbarth/redmine_ultraviolet
+
+  With Redmine, Textpow warnings still exist when Rails is launched :
+
+    /home/projets/redmine/trunk/plugins/redmine_ultraviolet/lib/uv_syntax_highlighting.rb:5: warning: already initialized constant CUSTOM_FIELD_NAME
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: invalid back reference: /\\(\n\d+|\k\w+|(?<!\|)\g\w+)/
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: invalid subexp call: /\\(\n\d+|\k\w+|(?<!\|)\g\w+)/
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: character class has ']' without escape
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: character class has ']' without escape
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: character class has ']' without escape
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: character class has ']' without escape
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: character class has ']' without escape
+    /var/lib/gems/1.9.1/gems/textpow-1.3.1/lib/textpow/syntax.rb:120: warning: character class has ']' without escape
+
 == LICENSE: MIT
 
 * Copyright (c) 2011 {Michael Grosser}[http://github.com/grosser]
