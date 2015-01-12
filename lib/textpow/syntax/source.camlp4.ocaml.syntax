@@ -22,7 +22,7 @@ patterns:
   endCaptures: 
     "1": 
       name: punctuation.definition.camlp4-stream.ocaml
-  begin: (\[<)(?=.*?>])
+  begin: (\[<)(?=.*?>\])
   beginCaptures: 
     "1": 
       name: punctuation.definition.camlp4-stream.ocaml
@@ -30,7 +30,7 @@ patterns:
   patterns: 
   - include: "#camlpppp-streams"
 - name: punctuation.definition.camlp4-stream.ocaml
-  match: \[<|>]
+  match: \[<|>\]
 - name: keyword.other.camlp4.ocaml
   match: \bparser\b|<(<|:)|>>|\$(:|\${0,1})
 foldingStopMarker: (\bEND\b)

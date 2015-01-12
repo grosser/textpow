@@ -117,7 +117,7 @@ module Textpow
     end
 
     def parse_regex_with_invalid_chars(value)
-      Regexp.new(value.force_encoding('UTF-8'))
+      Regexp.new(value.force_encoding('UTF-8'), nil, 'n')
     rescue RegexpError => e
       if e.message =~ /UTF-8/ or e.message =~ /invalid multibyte escape/
         puts "Ignored utf8 regex error #{$!}"

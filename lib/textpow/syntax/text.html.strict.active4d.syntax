@@ -104,7 +104,7 @@ repository:
     - include: "#embedded-code"
   tag-generic-attribute: 
     name: entity.other.attribute-name.html
-    match: \b([a-zA-Z-:]+)
+    match: \b([a-zA-Z\-:]+)
   string-single-quoted-js: 
     name: string.quoted.single.js
     endCaptures: 

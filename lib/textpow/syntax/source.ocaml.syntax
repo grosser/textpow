@@ -651,7 +651,7 @@ patterns:
   endCaptures: 
     "1": 
       name: punctuation.definition.camlp4-stream.ocaml
-  begin: (?=(\[<)(?![^\[]+?[^>]]))
+  begin: (?=(\[<)(?![^\[]+?[^>\]]))
   end: (>])
   patterns: 
   - include: source.camlp4.ocaml
